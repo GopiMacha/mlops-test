@@ -1,7 +1,7 @@
 from kfp import dsl
 from kfp.components import load_component_from_text
 
-# Mock components for CSV ingestion, training, and model deployment
+# Component: Load and process CSV data
 csv_example_gen_op = load_component_from_text("""
 name: CsvExampleGen
 description: Load and process CSV data.
@@ -29,6 +29,7 @@ implementation:
     - {outputPath: output_data}
 """)
 
+# Component: Train a machine learning model
 trainer_op = load_component_from_text("""
 name: Trainer
 description: Train a machine learning model.
@@ -56,6 +57,7 @@ implementation:
     - {outputPath: model}
 """)
 
+# Component: Push the trained model to a deployment location
 pusher_op = load_component_from_text("""
 name: Pusher
 description: Push the trained model to a destination.
@@ -87,7 +89,7 @@ implementation:
     name="Example Pipeline",
     description="A KFP pipeline for loading CSV data, training a model, and deploying it."
 )
-def create_pipeline(pipeline_root: str, data_path: str):
+def create_pipeline(pipeline_root, data_path):
     # Step 1: Load CSV data
     example_gen = csv_example_gen_op(input_base=data_path)
     
