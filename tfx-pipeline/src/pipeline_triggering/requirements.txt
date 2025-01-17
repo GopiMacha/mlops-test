@@ -1,0 +1,4 @@
+tensorflow>=2.8.0
+tfx>=1.10.0
+kfp>=1.8.1
+pytest
