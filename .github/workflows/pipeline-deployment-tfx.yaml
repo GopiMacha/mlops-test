@@ -23,6 +23,7 @@ jobs:
       # Step 1: Checkout Repository
       - name: Checkout Repository
         uses: actions/checkout@v3
+
       # Step 2: Set Up Python
       - name: Set up Python 3.9
         uses: actions/setup-python@v4
@@ -37,7 +38,8 @@ jobs:
           pip install google-cloud-videointelligence==2.7.0
           pip install google-cloud-spanner==3.50.0
           pip install tfx
-      # Step 2: Authenticate with Google Cloud
+
+      # Step 4: Authenticate with Google Cloud
       - id: auth
         name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
@@ -47,17 +49,14 @@ jobs:
           service_account: ${{ env.SERVICE_ACCOUNT }}
           access_token_lifetime: 7200s
 
-      # Step 3: Compile the TFX Pipeline
-      # Step 3: Compile the TFX Pipeline
-      - name: Compile TFX Pipeline
+      # Step 5: Compile the Pipeline
+      - name: Compile Pipeline
         run: |
-          cd ./tfx-pipeline # Navigate to the root directory of the TFX pipeline
-          python build/utils.py --mode compile-pipeline --pipeline-name example_pipeline
-        shell: bash
+          cd ./tfx-pipeline
+          python build/utils.py compile-pipeline
 
-      # Step 4: Upload Compiled Pipeline JSON to GCS
-      - name: Upload Compiled Pipeline to GCS
+      # Step 6: Upload Compiled Pipeline to GCS
+      - name: Upload Compiled Pipeline
         run: |
-          cd ./tfx-pipeline # Navigate to the root directory of the TFX pipeline
-          gsutil cp example_pipeline.json ${{ env.GCS_BUCKET }}
-        shell: bash
+          cd ./tfx-pipeline
+          gsutil cp example_pipeline.yaml ${{ env.GCS_BUCKET }}
