@@ -1,5 +1,5 @@
 from tfx.components import CsvExampleGen, Trainer, Pusher
-from tfx.dsl.pipeline import Pipeline
+from tfx.orchestration.pipeline import Pipeline
 
 def create_pipeline(pipeline_root: str, data_path: str) -> Pipeline:
     example_gen = CsvExampleGen(input_base=data_path)
