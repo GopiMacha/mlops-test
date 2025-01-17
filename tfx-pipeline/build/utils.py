@@ -11,6 +11,7 @@ def compile_pipeline():
     pipeline_func = create_pipeline(
         pipeline_root="gs://sinuous-myth-447220-m2_cloudbuild",
         data_path="data/sample_data.csv"
+        model_push_path="./model_deploy",  
     )
     kfp.compiler.Compiler().compile(pipeline_func, "example_pipeline.json")
 
