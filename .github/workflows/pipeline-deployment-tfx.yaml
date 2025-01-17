@@ -11,10 +11,10 @@ env:
   ENVIRONMENT: dev
   PROJECT_ID: sinuous-myth-447220-m2
   SERVICE_ACCOUNT: sinuous-sa-github@sinuous-myth-447220-m2.iam.gserviceaccount.com
-  REGION: europe-west4
+  REGION: us-east1
   DOCKER_REPO: europe-west4-docker.pkg.dev/sinuous-myth-447220-m2/docker-repo
   WORKLOAD_ID_PROVIDER: projects/871125057680/locations/global/workloadIdentityPools/gh-pool2/providers/gh-provider
-  GCS_BUCKET: gs://${bucket_name}/creditcards/compiled_pipelines/
+  GCS_BUCKET: gs://sinuous-creditcards-dev
 
 jobs:
   run-pipeline:
