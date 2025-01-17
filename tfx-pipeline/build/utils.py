@@ -1,9 +1,15 @@
+import sys
+import os
+
+# Add the tfx-pipeline directory to the Python path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../')
+
 import kfp
 from pipelines.example_pipeline import create_pipeline
 
 def compile_pipeline():
     pipeline_func = create_pipeline(
-        pipeline_root="gs://your-bucket-name/pipeline-root",
+        pipeline_root="gs://sinuous-myth-447220-m2_cloudbuild",
         data_path="data/sample_data.csv"
     )
     kfp.compiler.Compiler().compile(pipeline_func, "example_pipeline.json")
@@ -13,7 +19,6 @@ def run_pipeline():
     print("Running pipeline...")
 
 if __name__ == "__main__":
-    import sys
     mode = sys.argv[2]  # Get mode from command-line arguments
     if mode == "compile-pipeline":
         compile_pipeline()
