@@ -89,7 +89,7 @@ implementation:
     name="Example Pipeline",
     description="A KFP pipeline for loading CSV data, training a model, and deploying it."
 )
-def create_pipeline(pipeline_root, data_path):
+def create_pipeline(pipeline_root: str, data_path: str):  # Type annotations added
     # Step 1: Load CSV data
     example_gen = csv_example_gen_op(input_base=data_path)
     
