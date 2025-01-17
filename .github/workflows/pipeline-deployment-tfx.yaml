@@ -38,6 +38,8 @@ jobs:
           pip install google-cloud-videointelligence==2.7.0
           pip install google-cloud-spanner==3.50.0
           pip install tfx
+          pip install requests_toolbelt==0.10.1
+          pip install urllib3==1.26.6
 
       # Step 4: Authenticate with Google Cloud
       - id: auth
