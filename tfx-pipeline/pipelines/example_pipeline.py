@@ -16,7 +16,7 @@ def create_pipeline(pipeline_root: str, data_path: str, model_push_path: str) ->
     pusher = Pusher(
         model=trainer.outputs["model"],  # Model from Trainer
         push_destination=pusher_pb2.PushDestination(
-            filesystem=pusher_pb2.PushDestination.Filesystem(base_directory=model_push_path)
+            filesystem=pusher_pb2.PushDestination.Filesystem(base_directory="./model_deploy")
         ),
     )
     
