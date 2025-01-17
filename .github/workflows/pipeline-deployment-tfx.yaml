@@ -34,7 +34,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-           pip install kfp==1.8.16
+          pip install kfp==1.8.16
           pip install google-cloud-videointelligence==2.7.0
           pip install google-cloud-spanner==3.50.0
           pip install tfx
@@ -51,14 +51,20 @@ jobs:
           service_account: ${{ env.SERVICE_ACCOUNT }}
           access_token_lifetime: 7200s
 
-      # Step 5: Compile the Pipeline
+      # Step 5: Debug Authentication and Permissions (Optional for Debugging)
+      - name: Verify GCS Authentication
+        run: |
+          gcloud auth list
+          gcloud storage buckets list --project ${{ env.PROJECT_ID }}
+
+      # Step 6: Compile the Pipeline
       - name: Compile Pipeline
         run: |
           cd ./tfx-pipeline
           python build/utils.py compile-pipeline
 
-      # Step 6: Upload Compiled Pipeline to GCS
+      # Step 7: Upload Compiled Pipeline to GCS
       - name: Upload Compiled Pipeline
         run: |
           cd ./tfx-pipeline
-          gsutil cp example_pipeline.yaml ${{ env.GCS_BUCKET }}
+          gsutil cp example_pipeline.json ${{ env.GCS_BUCKET }}
