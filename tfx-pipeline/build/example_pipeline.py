@@ -18,16 +18,16 @@ implementation:
     - |
       import os
       import shutil
-      input_base = "{{inputs.parameters.input_base}}"
-      output_data = "{{outputs.parameters.output_data}}"
+      import sys
+      input_base = sys.argv[1]
+      output_data = sys.argv[2]
       os.makedirs(output_data, exist_ok=True)
       shutil.copytree(input_base, output_data)
     args:
-    - --input_base
     - {inputValue: input_base}
-    - --output_data
     - {outputPath: output_data}
 """)
+
 
 # Component: Train a machine learning model
 trainer_op = load_component_from_text("""
@@ -45,17 +45,17 @@ implementation:
     - -c
     - |
       import os
-      training_data = "{{inputs.parameters.training_data}}"
-      model = "{{outputs.parameters.model}}"
+      import sys
+      training_data = sys.argv[1]
+      model = sys.argv[2]
       os.makedirs(model, exist_ok=True)
       with open(os.path.join(model, "model.txt"), "w") as f:
           f.write("Trained model using: " + training_data)
     args:
-    - --training_data
     - {inputValue: training_data}
-    - --model
     - {outputPath: model}
 """)
+
 
 # Component: Push the trained model to a deployment location
 pusher_op = load_component_from_text("""
@@ -74,16 +74,16 @@ implementation:
     - |
       import os
       import shutil
-      model = "{{inputs.parameters.model}}"
-      deployment = "{{outputs.parameters.deployment}}"
+      import sys
+      model = sys.argv[1]
+      deployment = sys.argv[2]
       os.makedirs(deployment, exist_ok=True)
       shutil.copytree(model, deployment)
     args:
-    - --model
     - {inputValue: model}
-    - --deployment
     - {outputPath: deployment}
 """)
+
 
 @dsl.pipeline(
     name="Example Pipeline",
