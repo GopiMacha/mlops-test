@@ -12,14 +12,18 @@ def compile_pipeline():
     pipeline_root = "gs://sinuous-myth-447220-m2_cloudbuild"
     data_path = "data/sample_data.csv"  # Path to the CSV data
 
-    # Compile the KFP pipeline
+    # Define a function to pass parameters to the pipeline
+    def pipeline_func():
+        return create_pipeline(pipeline_root=pipeline_root, data_path=data_path)
+
+    # Compile the pipeline
     Compiler().compile(
-        pipeline_func=lambda: create_pipeline(pipeline_root=pipeline_root, data_path=data_path),
+        pipeline_func=pipeline_func,
         package_path="example_pipeline.yaml"
     )
 
 def run_pipeline():
-    # Trigger the pipeline execution (to be implemented if needed)
+    # Placeholder for running the pipeline (if needed)
     print("Running pipeline is not implemented in this script.")
 
 if __name__ == "__main__":
@@ -28,4 +32,3 @@ if __name__ == "__main__":
         compile_pipeline()
     elif mode == "run-pipeline":
         run_pipeline()
-
