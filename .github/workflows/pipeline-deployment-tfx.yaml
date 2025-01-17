@@ -35,21 +35,16 @@ jobs:
           access_token_lifetime: 7200s
 
       # Step 3: Compile the TFX Pipeline
+      # Step 3: Compile the TFX Pipeline
       - name: Compile TFX Pipeline
-        uses: docker://python:3.9
-        with:
-          entrypoint: python
-        args:
-          - build/utils.py
-          - --mode
-          - compile-pipeline
-          - --pipeline-name
-          - example_pipeline
-        working-directory: ./ # Root directory of the TFX pipeline
-        id: compile-pipeline
+        run: |
+          cd ./tfx-pipeline # Navigate to the root directory of the TFX pipeline
+          python build/utils.py --mode compile-pipeline --pipeline-name example_pipeline
+        shell: bash
 
       # Step 4: Upload Compiled Pipeline JSON to GCS
       - name: Upload Compiled Pipeline to GCS
         run: |
+          cd ./tfx-pipeline # Navigate to the root directory of the TFX pipeline
           gsutil cp example_pipeline.json ${{ env.GCS_BUCKET }}
-        working-directory: ./ # Root directory of the TFX pipeline
+        shell: bash
