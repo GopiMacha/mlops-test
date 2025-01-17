@@ -2,7 +2,7 @@ from tfx.components import CsvExampleGen, Trainer, Pusher
 from tfx.orchestration.pipeline import Pipeline
 from tfx.proto import pusher_pb2  # Required for defining push destinations
 
-def create_pipeline(pipeline_root: str, data_path: str, model_push_path: str) -> Pipeline:
+def create_pipeline(pipeline_root: str, data_path: str) -> Pipeline:
     # Step 1: Ingest CSV data
     example_gen = CsvExampleGen(input_base=data_path)
     
@@ -16,7 +16,7 @@ def create_pipeline(pipeline_root: str, data_path: str, model_push_path: str) ->
     pusher = Pusher(
         model=trainer.outputs["model"],  # Model from Trainer
         push_destination=pusher_pb2.PushDestination(
-            filesystem=pusher_pb2.PushDestination.Filesystem(base_directory="./model_deploy")
+            filesystem=pusher_pb2.PushDestination.Filesystem(base_directory="./model_deploy")  # Direct folder path
         ),
     )
     
@@ -26,5 +26,3 @@ def create_pipeline(pipeline_root: str, data_path: str, model_push_path: str) ->
         pipeline_root=pipeline_root,
         components=[example_gen, trainer, pusher],
     )
-
-

@@ -10,8 +10,7 @@ from pipelines.example_pipeline import create_pipeline
 def compile_pipeline():
     pipeline_func = create_pipeline(
         pipeline_root="gs://sinuous-myth-447220-m2_cloudbuild",
-        data_path="data/sample_data.csv"
-       # model_push_path="gs://sinuous-creditcards-dev",  
+        data_path="data/sample_data.csv"  # Path to the CSV data
     )
     kfp.compiler.Compiler().compile(pipeline_func, "example_pipeline.json")
 
