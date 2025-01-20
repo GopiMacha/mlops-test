@@ -52,7 +52,7 @@ def create_pipeline(
 ):
     # Step 1: Load CSV data
     example_gen = csv_example_gen_op(
-        input_base=data_path
+        input_base=data_path,
         output_data=dsl.OutputPath(str)
     )
 
