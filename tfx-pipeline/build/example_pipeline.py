@@ -7,7 +7,6 @@ def load_csv(input_base: str, output_data: OutputPath(str)):
     """Loads and copies CSV data."""
     import os
     import shutil
-    print(f"Loading CSV from {input_base} to {output_data}")
     os.makedirs(output_data, exist_ok=True)
     shutil.copytree(input_base, output_data)
 
@@ -20,7 +19,6 @@ csv_example_gen_op = create_component_from_func(
 def train_model(training_data: str, model_output: OutputPath(str)):
     """Trains a simple model using the training data."""
     import os
-    print(f"Training model with data from {training_data} and saving to {model_output}")
     os.makedirs(model_output, exist_ok=True)
     with open(os.path.join(model_output, "model.txt"), "w") as f:
         f.write(f"Trained model using data at {training_data}")
@@ -35,7 +33,6 @@ def push_model(model: str, deployment: OutputPath(str)):
     """Pushes the trained model to a deployment directory."""
     import os
     import shutil
-    print(f"Pushing model from {model} to {deployment}")
     os.makedirs(deployment, exist_ok=True)
     shutil.copytree(model, deployment)
 
