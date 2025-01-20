@@ -1,6 +1,6 @@
 from kfp.v2 import dsl
 from kfp.v2.dsl import OutputPath
-from kfp.components import create_component_from_func
+from kfp.v2.dsl import component as create_component_from_func
 
 # Component: Dummy step to write data to a file
 def generate_data(output_data: OutputPath(str)):
