@@ -35,7 +35,7 @@ jobs:
       # Step 3: Authenticate to Google Cloud using key.json
       - name: Authenticate to Google Cloud
         run: |
-          echo "${{ secrets.GCLOUD_KEY }}" > key.json
+          echo "${{ secrets.GCLOUD_KEY }}" | base64 --decode > key.json
           gcloud auth activate-service-account --key-file=key.json
           gcloud config set project ${{ env.PROJECT_ID }}
           rm key.json  # Remove the file after use for security
