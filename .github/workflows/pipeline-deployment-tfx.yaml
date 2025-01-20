@@ -50,7 +50,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install kfp==1.8.16
+          pip install --upgrade kfp
           pip install google-cloud-videointelligence==2.7.0
           pip install google-cloud-spanner==3.50.0
           pip install tfx
@@ -67,7 +67,7 @@ jobs:
       - name: Compile Pipeline
         run: |
           cd ./tfx-pipeline
-          python build/utils.py compile-pipeline
+          python build/util1.py compile-pipeline
 
       # Step 8: Upload Compiled Pipeline to GCS
       - name: Upload Compiled Pipeline
