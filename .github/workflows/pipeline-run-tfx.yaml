@@ -38,11 +38,14 @@ jobs:
           gcloud auth activate-service-account --key-file=key.json
           gcloud config set project ${{ env.PROJECT_ID }}
           rm key.json  # Remove the file after use for security
-
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
       # Step 4: Install Python Dependencies
       - name: Install Python Dependencies
         run: |
-          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade pip
           pip install kfp==1.8.16
           pip install google-cloud-videointelligence==2.7.0
           pip install google-cloud-spanner==3.50.0
