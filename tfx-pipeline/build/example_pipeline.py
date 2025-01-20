@@ -1,5 +1,5 @@
 from kfp.v2 import dsl
-from kfp.v2.dsl import Input, Output, Dataset, Model
+from kfp.v2.dsl import Input, Output, Dataset
 from kfp.components import create_component_from_func
 
 # Component: Load and process CSV data
@@ -16,7 +16,7 @@ csv_example_gen_op = create_component_from_func(
 )
 
 # Component: Train a machine learning model
-def train_model(training_data: Input[Dataset], model: Output[Model]):
+def train_model(training_data: Input[Dataset], model: Output[Dataset]):
     """Trains a simple model using the training data."""
     import os
     os.makedirs(model.path, exist_ok=True)
@@ -29,7 +29,7 @@ trainer_op = create_component_from_func(
 )
 
 # Component: Push the trained model to a deployment location
-def push_model(model: Input[Model], deployment: Output[Dataset]):
+def push_model(model: Input[Dataset], deployment: Output[Dataset]):
     """Pushes the trained model to a deployment directory."""
     import os
     import shutil
@@ -53,14 +53,17 @@ def create_pipeline(
     # Step 1: Load CSV data
     example_gen = csv_example_gen_op(
         input_base=data_path,
+        output_data=Output[Dataset]()  # Correctly handle the output
     )
 
     # Step 2: Train the model
     trainer = trainer_op(
-        training_data=example_gen.outputs["output_data"]
+        training_data=example_gen.outputs["output_data"],
+        model=Output[Dataset]()  # Correctly handle the output
     )
 
     # Step 3: Deploy the trained model
     pusher = pusher_op(
-        model=trainer.outputs["model"]
+        model=trainer.outputs["model"],
+        deployment=Output[Dataset]()  # Correctly handle the output
     )
