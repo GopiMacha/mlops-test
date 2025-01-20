@@ -86,7 +86,7 @@ implementation:
 
 
 @dsl.pipeline(
-    name="example-pipeline",
+    name="example",
     description="A KFP pipeline for loading CSV data, training a model, and deploying it."
 )
 def create_pipeline(pipeline_root: str, data_path: str):  # Type annotations added
