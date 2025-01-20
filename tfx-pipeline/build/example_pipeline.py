@@ -21,7 +21,7 @@ def train_model(training_data: Input[Dataset], model: Output[Model]):
     import os
     os.makedirs(model.path, exist_ok=True)
     with open(os.path.join(model.path, "model.txt"), "w") as f:
-        f.write("Trained model using: " + training_data.path)
+        f.write(f"Trained model using: {training_data.path}")
 
 trainer_op = create_component_from_func(
     func=train_model,
@@ -53,17 +53,14 @@ def create_pipeline(
     # Step 1: Load CSV data
     example_gen = csv_example_gen_op(
         input_base=data_path,
-        output_data=Dataset(path=f"{pipeline_root}/example_gen_output")
     )
 
     # Step 2: Train the model
     trainer = trainer_op(
-        training_data=example_gen.outputs["output_data"],
-        model=Model(path=f"{pipeline_root}/trainer_output")
+        training_data=example_gen.outputs["output_data"]
     )
 
     # Step 3: Deploy the trained model
     pusher = pusher_op(
-        model=trainer.outputs["model"],
-        deployment=Dataset(path=f"{pipeline_root}/pusher_output")
+        model=trainer.outputs["model"]
     )
