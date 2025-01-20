@@ -1,22 +1,19 @@
 import yaml
 import json
-import os
-import sys
-from kfp.compiler import Compiler
-
-# Add the root directory (`tfx-pipeline`) to Python's module path
+from kfp.v2.compiler import Compiler
 from example_pipeline import create_pipeline
 
 def compile_pipeline():
+    """Compile the pipeline and convert the output to JSON format."""
     pipeline_root = "gs://sinuous-myth-447220-m2_cloudbuild"
     data_path = "data/sample_data.csv"
     yaml_output_path = "example_pipeline.yaml"
     json_output_path = "example_pipeline.json"
 
-    # Compile the KFP pipeline
+    # Step 1: Compile the pipeline to a YAML file
     Compiler().compile(
         pipeline_func=lambda: create_pipeline(pipeline_root=pipeline_root, data_path=data_path),
-        package_path=yaml_output_path 
+        package_path=yaml_output_path  # Generates a YAML file
     )
     print(f"Pipeline successfully compiled to '{yaml_output_path}'.")
 
@@ -30,9 +27,4 @@ def compile_pipeline():
     print(f"Pipeline successfully converted to JSON: '{json_output_path}'.")
 
 if __name__ == "__main__":
-    mode = sys.argv[1]  # Get mode from command-line arguments
-    if mode == "compile-pipeline":
-        compile_pipeline()
-    else:
-        print("Unsupported mode. Use 'compile-pipeline'.")
-
+    compile_pipeline()
