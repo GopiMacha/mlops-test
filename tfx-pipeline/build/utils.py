@@ -16,7 +16,7 @@ def compile_pipeline():
         pipeline_func=lambda: create_pipeline(pipeline_root=pipeline_root, data_path=data_path),
         package_path=yaml_output_path 
     )
-     print(f"Pipeline successfully compiled to '{yaml_output_path}'.")
+    print(f"Pipeline successfully compiled to '{yaml_output_path}'.")
 
     # Step 2: Convert the YAML file to JSON format
     with open(yaml_output_path, "r") as yaml_file:
