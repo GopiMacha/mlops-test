@@ -73,4 +73,4 @@ jobs:
       - name: Upload Compiled Pipeline
         run: |
           cd ./tfx-pipeline
-          gsutil cp example_pipeline.json ${{ env.GCS_BUCKET }}
+          gsutil cp simple_poc_pipeline.json ${{ env.GCS_BUCKET }}
