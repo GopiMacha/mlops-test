@@ -52,18 +52,15 @@ def create_pipeline(
 ):
     # Step 1: Load CSV data
     example_gen = csv_example_gen_op(
-        input_base=data_path,
-        output_data=f"{pipeline_root}/example_gen_output"
+        input_base=data_path
     )
 
     # Step 2: Train the model
     trainer = trainer_op(
-        training_data=example_gen.output,  # Use default single output
-        model_output=f"{pipeline_root}/trainer_output"
+        training_data=example_gen.outputs["output_data"]  # Use automatically managed path
     )
 
     # Step 3: Deploy the trained model
     pusher = pusher_op(
-        model=trainer.output,  # Use default single output
-        deployment=f"{pipeline_root}/pusher_output"
+        model=trainer.outputs["model_output"]  # Use automatically managed path
     )
