@@ -2,12 +2,12 @@ from kfp.v2 import dsl
 from kfp.components import create_component_from_func
 
 # Component: Load and process CSV data
-def load_csv(input_base: str, output_data_path: str):
+def load_csv(input_base: str, output_data: str):
     """Loads and copies CSV data."""
     import os
     import shutil
-    os.makedirs(output_data_path, exist_ok=True)
-    shutil.copytree(input_base, output_data_path)
+    os.makedirs(output_data, exist_ok=True)
+    shutil.copytree(input_base, output_data)
 
 csv_example_gen_op = create_component_from_func(
     func=load_csv,
@@ -15,12 +15,12 @@ csv_example_gen_op = create_component_from_func(
 )
 
 # Component: Train a machine learning model
-def train_model(training_data_path: str, model_output_path: str):
+def train_model(training_data: str, model_output: str):
     """Trains a simple model using the training data."""
     import os
-    os.makedirs(model_output_path, exist_ok=True)
-    with open(os.path.join(model_output_path, "model.txt"), "w") as f:
-        f.write(f"Trained model using data at {training_data_path}")
+    os.makedirs(model_output, exist_ok=True)
+    with open(os.path.join(model_output, "model.txt"), "w") as f:
+        f.write(f"Trained model using data at {training_data}")
 
 trainer_op = create_component_from_func(
     func=train_model,
@@ -28,12 +28,12 @@ trainer_op = create_component_from_func(
 )
 
 # Component: Push the trained model to a deployment location
-def push_model(model_path: str, deployment_path: str):
+def push_model(model: str, deployment: str):
     """Pushes the trained model to a deployment directory."""
     import os
     import shutil
-    os.makedirs(deployment_path, exist_ok=True)
-    shutil.copytree(model_path, deployment_path)
+    os.makedirs(deployment, exist_ok=True)
+    shutil.copytree(model, deployment)
 
 pusher_op = create_component_from_func(
     func=push_model,
@@ -52,17 +52,17 @@ def create_pipeline(
     # Step 1: Load CSV data
     example_gen = csv_example_gen_op(
         input_base=data_path,
-        output_data_path=f"{pipeline_root}/example_gen_output"
+        output_data=f"{pipeline_root}/example_gen_output"
     )
 
     # Step 2: Train the model
     trainer = trainer_op(
-        training_data_path=example_gen.output,  # Fixing the correct output reference
-        model_output_path=f"{pipeline_root}/trainer_output"
+        training_data=example_gen.outputs["output_data"],  # Explicitly reference the output
+        model_output=f"{pipeline_root}/trainer_output"
     )
 
     # Step 3: Deploy the trained model
     pusher = pusher_op(
-        model_path=trainer.output,
-        deployment_path=f"{pipeline_root}/pusher_output"
+        model=trainer.outputs["model_output"],  # Explicitly reference the output
+        deployment=f"{pipeline_root}/pusher_output"
     )
