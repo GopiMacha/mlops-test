@@ -12,7 +12,7 @@ def compile_pipeline():
     # Compile the KFP pipeline
     Compiler().compile(
         pipeline_func=lambda: create_pipeline(pipeline_root=pipeline_root, data_path=data_path),
-        package_path="example_pipeline.yaml"
+        package_path="example_pipeline.json"
     )
 
 if __name__ == "__main__":
