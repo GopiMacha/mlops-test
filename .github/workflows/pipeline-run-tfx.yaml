@@ -1,24 +1,65 @@
-steps:
-  # Step 1: Install dependencies
-  - name: "python:3.9"
-    entrypoint: pip
-    args:
-      ["install", "-r", "src/pipeline_triggering/requirements.txt", "--user"]
-    dir: "./" # Root directory of the tfx-pipeline structure
-    id: "Install Dependencies"
+name: Run TFX Pipeline
+on:
+  workflow_dispatch:
 
-  # Step 2: Run the pipeline
-  - name: "python:3.9"
-    entrypoint: "python"
-    args:
-      - build/utils.py
-      - --mode
-      - run-pipeline
-      - --pipeline-json
-      - gs://your-bucket-name/compiled_pipelines/example_pipeline.json
-      - --region
-      - your-region
-      - --project
-      - your-project-id
-    dir: "./" # Root directory of the tfx-pipeline structure
-    id: "Run Pipeline"
+permissions:
+  contents: "read"
+  id-token: "write"
+
+env:
+  ENVIRONMENT: dev
+  PROJECT_ID: sinuous-myth-447220-m2
+  SERVICE_ACCOUNT: admin-157@sinuous-myth-447220-m2.iam.gserviceaccount.com
+  REGION: us-east1
+  DOCKER_REPO: europe-west4-docker.pkg.dev/sinuous-myth-447220-m2/docker-repo
+  GCS_BUCKET: gs://sinuous-creditcards-dev
+jobs:
+  run-pipeline:
+    name: Run TFX Pipeline
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout Repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Install Google Cloud SDK
+      - name: Install Google Cloud SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https ca-certificates gnupg
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+          sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+
+      # Step 3: Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud
+        run: |
+          echo "${{ secrets.GCLOUD_KEY }}" > key.json
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud config set project ${{ env.PROJECT_ID }}
+          rm key.json  # Remove the file for security
+
+      # Step 4: Install Python Dependencies
+      - name: Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install kfp==1.8.16
+          pip install google-cloud-videointelligence==2.7.0
+          pip install google-cloud-spanner==3.50.0
+          pip install tfx
+          pip install requests_toolbelt==0.10.1
+          pip install urllib3==1.26.6
+
+      # Step 5: Run the Pipeline
+      - name: Run Pipeline
+        run: |
+          python build/utils.py \
+            run-pipeline \
+            --pipeline-json ${{ env.GCS_BUCKET }}/example_pipeline.json \
+            --region ${{ env.REGION }} \
+            --project ${{ env.PROJECT_ID }}
+
+      # Step 6: Debug Logs (Optional)
+      - name: Verify GCS Buckets
+        run: |
+          gcloud storage buckets list --project ${{ env.PROJECT_ID }}
