@@ -52,7 +52,10 @@ def create_pipeline(
     data_path: str
 ):
     # Step 1: Load CSV data
-    example_gen = csv_example_gen_op(input_base=data_path)
+      example_gen = csv_example_gen_op(
+        input_base=data_path,
+        output_data=f"{pipeline_root}/example_gen_output"
+    )
 
     # Step 2: Train the model
     trainer = trainer_op(training_data=example_gen.outputs["output_data"])
