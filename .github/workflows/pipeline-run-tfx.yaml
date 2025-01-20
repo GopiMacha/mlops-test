@@ -48,6 +48,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install kfp==1.8.16
           pip install google-cloud-videointelligence==2.7.0
+          pip install google-cloud-aiplatform==1.18.0
+          pip install google-cloud-storage
           pip install google-cloud-spanner==3.50.0
           pip install tfx
           pip install requests_toolbelt==0.10.1
