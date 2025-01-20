@@ -56,6 +56,7 @@ jobs:
       # Step 5: Run the Pipeline
       - name: Run Pipeline
         run: |
+          cd ./tfx-pipeline
           python build/utilrun.py \
             run-pipeline \
             --pipeline-json ${{ env.GCS_BUCKET }}/example_pipeline.json \
