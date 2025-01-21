@@ -1,5 +1,5 @@
 from kfp.v2.compiler import Compiler
-from example-pipeline import pipeline
+from example_pipeline import pipeline
 import google.cloud.aiplatform as aip
 import sys
 import os
