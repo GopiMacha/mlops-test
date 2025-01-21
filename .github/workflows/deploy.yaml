@@ -1,0 +1,64 @@
+name: Deploy Vertex AI Pipeline
+
+on:
+  workflow_dispatch: # Allow manual execution of the workflow
+
+env:
+  PROJECT_ID: sinuous-myth-447220-m2
+  REGION: us-east1
+  BUCKET_URI: gs://sinuous-creditcards-dev
+
+jobs:
+  deploy-pipeline:
+    name: Compile and Deploy Vertex AI Pipeline
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      # Step 3: Install required Python packages
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade google-cloud-aiplatform google-cloud-storage kfp google-cloud-pipeline-components
+
+      # Step 4: Authenticate with Google Cloud
+      - name: Authenticate with Google Cloud
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${{ secrets.GCLOUD_KEY }}"
+        run: |
+          echo "${{ secrets.GCLOUD_KEY }}" | base64 --decode > key.json
+          gcloud auth activate-service-account --key-file=key.json
+          gcloud config set project ${{ env.PROJECT_ID }}
+          rm key.json  # Remove credentials for security
+
+      # Step 5: Compile Pipeline
+      - name: Compile Pipeline
+        env:
+          PROJECT_ID: ${{ env.PROJECT_ID }}
+          REGION: ${{ env.REGION }}
+          BUCKET_URI: ${{ env.BUCKET_URI }}
+        run: |
+          cd ./tfx
+          python util.py compile
+
+      # Step 6: Upload Compiled Pipeline
+      - name: Upload Compiled Pipeline
+        env:
+          BUCKET_URI: ${{ env.BUCKET_URI }}
+        run: |
+          cd ./tfx
+          gsutil cp text_classification_pipeline.yaml ${{ env.BUCKET_URI }}
+
+      # Optional: Verify Buckets for Debugging
+      - name: Verify GCS Buckets
+        run: |
+          gcloud storage buckets list --project ${{ env.PROJECT_ID }}
