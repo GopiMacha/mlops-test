@@ -1,5 +1,5 @@
 from kfp.v2.compiler import Compiler
-from example_pipeline import pipeline
+from example-pipeline import pipeline
 import google.cloud.aiplatform as aip
 import sys
 import os
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     PROJECT_ID = os.getenv("PROJECT_ID", "your-project-id")
     REGION = os.getenv("REGION", "us-central1")
     BUCKET_URI = os.getenv("BUCKET_URI", "gs://your-bucket-name")
-    IMPORT_FILE = "gs://cloud-ml-data/NL-classification/happiness.csv"
+    IMPORT_FILE = "gs://sinuous-creditcards-dev/happiness.csv"
     DISPLAY_NAME = "automl-text-classification"
     PIPELINE_FILE = "text_classification_pipeline.yaml"
 

@@ -48,7 +48,7 @@ jobs:
           BUCKET_URI: ${{ env.BUCKET_URI }}
         run: |
           cd ./tfx
-          python util.py compile
+          python utils.py compile
 
       # Step 6: Upload Compiled Pipeline
       - name: Upload Compiled Pipeline
