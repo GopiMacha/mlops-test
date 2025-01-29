@@ -42,4 +42,5 @@ jobs:
           REGION: "${{ secrets.REGION }}"
           BUCKET_URI: "${{ secrets.BUCKET_URI }}"
         run: |
-          python util.py run
+           cd ./tfx
+           python util.py run
