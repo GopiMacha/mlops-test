@@ -3,6 +3,11 @@ name: Run Vertex AI Pipeline
 on:
   workflow_dispatch: # Allow manual execution of the workflow
 
+env:
+  PROJECT_ID: sinuous-myth-447220-m2
+  REGION: us-east1
+  BUCKET_URI: gs://sinuous-creditcards-dev
+
 jobs:
   run-pipeline:
     name: Execute Vertex AI Pipeline
@@ -32,15 +37,15 @@ jobs:
         run: |
           echo "${{ secrets.GCLOUD_KEY }}" | base64 --decode > key.json
           gcloud auth activate-service-account --key-file=key.json
-          gcloud config set project ${{ secrets.PROJECT_ID }}
+          gcloud config set project ${{ env.PROJECT_ID }}
           #rm key.json  # Remove credentials for security
 
       # Step 5: Execute Pipeline
       - name: Run Pipeline
         env:
-          PROJECT_ID: "${{ secrets.PROJECT_ID }}"
-          REGION: "${{ secrets.REGION }}"
-          BUCKET_URI: "${{ secrets.BUCKET_URI }}"
+          PROJECT_ID: ${{ env.PROJECT_ID }}
+          REGION:  ${{ env.REGION }}
+          BUCKET_URI: ${{ env.BUCKET_URI }}
           GOOGLE_APPLICATION_CREDENTIALS: key.json
         run: |
            cd ./tfx
