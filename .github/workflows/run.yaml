@@ -43,4 +43,4 @@ jobs:
           BUCKET_URI: "${{ secrets.BUCKET_URI }}"
         run: |
            cd ./tfx
-           python util.py run
+           python utils.py run
