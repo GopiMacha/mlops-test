@@ -1,7 +1,8 @@
 from kfp.v2 import dsl
 from kfp.v2.dsl import component, Input, Output, Dataset, Model
 from google_cloud_pipeline_components.v1.dataset import TextDatasetCreateOp
-from google_cloud_pipeline_components.v1.automl import AutoMLTextTrainingJobRunOp
+from google_cloud_pipeline_components.v1.automl.training_job import \
+        AutoMLTextTrainingJobRunOp
 from google_cloud_pipeline_components.v1.endpoint import EndpointCreateOp, ModelDeployOp
 
 @dsl.pipeline(
