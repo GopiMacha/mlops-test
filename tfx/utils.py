@@ -21,17 +21,17 @@ def run_pipeline(
     display_name: str,
 ):
     """Runs the compiled pipeline on Vertex AI."""
-    pipeline_root = f"{bucket_uri}/pipeline_root"
+    pipeline_root = "gs://sinuous-myth-447220-m2_cloudbuild"
     aip.init(project=project_id, staging_bucket=bucket_uri)
 
     job = aip.PipelineJob(
         display_name=display_name,
-        template_path=pipeline_file,
+        template_path=f"{bucket_uri}/text_classification_pipeline.yaml",
         pipeline_root=pipeline_root,
         parameter_values={
             "project": project_id,
             "region": region,
-            "import_file": import_file,
+            #"import_file": import_file,
             "display_name": display_name,
             "pipeline_root": pipeline_root,
         },
