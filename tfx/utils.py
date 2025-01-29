@@ -31,7 +31,7 @@ def run_pipeline(
         parameter_values={
             "project": project_id,
             "region": region,
-            #"import_file": import_file,
+            "import_file": import_file,
             "display_name": display_name,
             "pipeline_root": pipeline_root,
         },
