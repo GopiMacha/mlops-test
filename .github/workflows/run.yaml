@@ -30,7 +30,7 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: "${{ secrets.GCLOUD_KEY }}"
         run: |
-          echo "${{ secrets.GCLOUD_KEY }}" > key.json
+          echo "${{ secrets.GCLOUD_KEY }}" | base64 --decode > key.json
           gcloud auth activate-service-account --key-file=key.json
           gcloud config set project ${{ secrets.PROJECT_ID }}
           rm key.json  # Remove credentials for security
